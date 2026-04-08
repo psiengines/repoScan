@@ -23,7 +23,7 @@ updates:
       timezone: "America/New_York"
     open-pull-requests-limit: 10
     reviewers:
-      - "psiengines/engineering"       # adjust to your GitHub team slug
+      - "psiengines/CodeReviewers"
     labels:
       - "dependencies"
       - "security"
@@ -74,7 +74,7 @@ updates:
       timezone: "America/New_York"
     open-pull-requests-limit: 5
     reviewers:
-      - "psiengines/engineering"       # adjust to your GitHub team slug
+      - "psiengines/CodeReviewers"
     labels:
       - "dependencies"
       - "docker"
@@ -100,3 +100,4 @@ updates:
   #     - "ci"
   #   commit-message:
   #     prefix: "chore(ci)"
+
