@@ -1,15 +1,103 @@
----
+# Dependabot configuration for PSI Next.js applications
+# Copy this file to .github/dependabot.yml in each repository.
+#
+# Docs: https://docs.github.com/en/code-security/dependabot/configuration-options-for-the-dependabot.yml-file
+#
+# What this covers:
+#   - npm: react, react-dom, next, @types/*, lucide-react, tailwindcss, etc.
+#   - docker: base images in Dockerfile (node:18-alpine, postgres:15-alpine, etc.)
+#
+# To enable vulnerability alerts (separate from version updates):
+#   Org settings → Code security and analysis → Enable Dependabot alerts
+
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
+
+  # ── npm dependencies (package.json / package-lock.json) ──
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-  - package-ecosystem: npm
-    directory: "/javascript"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "psiengines/CodeReviewers"
+    labels:
+      - "dependencies"
+      - "security"
+    commit-message:
+      prefix: "fix(deps)"
+      prefix-development: "chore(deps-dev)"
+    # Group related updates into fewer PRs to reduce noise
+    groups:
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      nextjs:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+      ui-libraries:
+        patterns:
+          - "lucide-react"
+          - "class-variance-authority"
+          - "clsx"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+      types:
+        patterns:
+          - "@types/*"
+        exclude-patterns:
+          - "@types/react"
+          - "@types/react-dom"
+    # Always allow security patches regardless of version constraints
+    versioning-strategy: increase
+
+  # ── Docker base images (Dockerfile) ──
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
       interval: "weekly"
-  - package-ecosystem: bundler
-    directory: "/ruby"
-    schedule:
-      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "psiengines/CodeReviewers"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "fix(docker)"
+
+  # ── Docker Compose service images (if using image: directives) ──
+  # Dependabot scans docker-compose.yml for pinned images like
+  # postgres:15-alpine and dbgate/dbgate:latest automatically
+  # when the docker ecosystem is enabled above.
+
+  # ── GitHub Actions (uncomment when you add CI workflows) ──
+  # - package-ecosystem: "github-actions"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "monday"
+  #     time: "08:00"
+  #     timezone: "America/New_York"
+  #   open-pull-requests-limit: 5
+  #   labels:
+  #     - "dependencies"
+  #     - "ci"
+  #   commit-message:
+  #     prefix: "chore(ci)"
+
